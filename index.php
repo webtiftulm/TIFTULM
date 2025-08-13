@@ -655,6 +655,13 @@ switch (ENVIRONMENT)
  * And away we go...
 
  */
+require __DIR__ . '/vendor/autoload.php';
+\Sentry\init([
+  'dsn' => 'https://f05cc74ac90b44c7ed20d913ff9a957b@o4509749517680640.ingest.us.sentry.io/4509749520433152',
+  // Add request headers, cookies and IP address,
+  // see https://docs.sentry.io/platforms/php/data-management/data-collected/ for more info
+  'send_default_pii' => true,
+]);
 
 require_once BASEPATH.'core/CodeIgniter.php';
 
