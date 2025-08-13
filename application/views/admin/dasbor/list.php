@@ -5,7 +5,7 @@
       <span class="info-box-icon bg-info elevation-1"><i class="fa fa-newspaper-o"></i></span>
 
       <div class="info-box-content">
-        <span class="info-box-text">Berita</span>
+        <span class="info-box-text">Beritaa</span>
         <span class="info-box-number">
           <?php echo $this->dasbor_model->berita()->total; ?>
           <small>Post</small>
