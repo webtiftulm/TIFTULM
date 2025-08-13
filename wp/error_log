@@ -1,0 +1,2 @@
+[10-Feb-2025 06:48:15 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 4096 bytes) in /home/tiftulm/public_html/wp/wp-includes/blocks/blocks-json.php on line 5550
+[10-Feb-2025 06:48:15 UTC] PHP Fatal error:  Allowed memory size of 41943040 bytes exhausted (tried to allocate 32768 bytes) in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/php-cli-tools/lib/cli/Colors.php on line 1
