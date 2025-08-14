@@ -41,13 +41,13 @@
             <?php $i=1; foreach($rps as $rps) { ?>
              <tr <?php if($rps->semesterMatkul % 2 == 0){ echo"bgcolor='#EBF5FB'";}?>>
                <td><?php echo $i ?></td>
-               <td><?php echo $rps->kdMatkul ?></td>
-               <td><?php echo $rps->namaMatkul ?></td>
-               <td><?php echo $rps->sksMatkul ?></td>
-               <td><?php echo $rps->semesterMatkul ?></td>
-               <td><?php echo $rps->ket ?></td>
+               <td><?php echo html_escape($rps->kdMatkul) ?></td>
+               <td><?php echo html_escape($rps->namaMatkul) ?></td>
+               <td><?php echo html_escape($rps->sksMatkul) ?></td>
+               <td><?php echo html_escape($rps->semesterMatkul) ?></td>
+               <td><?php echo html_purify($rps->ket) ?></td>
                <td><?php if(!empty($rps->fileRps)){ ?>
-                 <a href="<?php echo base_url('rps/unduh/'.$rps->idRps) ?>" class="btn btn-primary btn-xs" target="_blank">
+                 <a href="<?php echo base_url('rps/unduh/'.html_escape($rps->idRps)) ?>" class="btn btn-primary btn-xs" target="_blank">
                    <i class="fa fa-download"></i> Unduh RPS</a>
                    <?php } ?>
                  </td>

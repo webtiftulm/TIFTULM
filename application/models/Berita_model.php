@@ -181,11 +181,17 @@ class Berita_model extends CI_Model {
 
 	// Listing berita
 	public function berita($limit,$start) {
-		$this->db->select('berita.*, 
+		$language = $this->session->userdata('language');
+
+        if ($language == 'english') {
+            $this->db->select('berita.id_berita, berita.slug_berita, berita.judul_berita_en AS judul_berita, berita.isi_en AS isi, berita.gambar, berita.tanggal_publish, users.nama, kategori.nama_kategori, kategori.slug_kategori');
+        } else {
+    		$this->db->select('berita.*, 
 					users.nama, 
 					kategori.nama_kategori, kategori.slug_kategori,
 					kategori.slug_kategori
 					');
+        }
 		$this->db->from('berita');
 		// Join dg 2 tabel
 		$this->db->join('kategori','kategori.id_kategori = berita.id_kategori','LEFT');
@@ -216,11 +222,18 @@ class Berita_model extends CI_Model {
 
 	// Listing berita
 	public function search($keywords,$limit,$start) {
-		$this->db->select('berita.*, 
+		$language = $this->session->userdata('language');
+
+        if ($language == 'english') {
+            $this->db->select('berita.id_berita, berita.slug_berita, berita.judul_berita_en AS judul_berita, berita.isi_en AS isi, berita.gambar, berita.tanggal_publish, users.nama, kategori.nama_kategori, kategori.slug_kategori');
+        } else {
+    		$this->db->select('berita.*, 
 					users.nama, 
 					kategori.nama_kategori, kategori.slug_kategori,
 					kategori.slug_kategori
 					');
+        }
+
 		$this->db->from('berita');
 		// Join dg 2 tabel
 		$this->db->join('kategori','kategori.id_kategori = berita.id_kategori','LEFT');
@@ -228,8 +241,19 @@ class Berita_model extends CI_Model {
 		// End join
 		$this->db->where(array(	'berita.status_berita'	=> 'Publish',
 								'berita.jenis_berita'	=> 'Berita'));
-		$this->db->like('berita.judul_berita',$keywords);
-		$this->db->or_like('berita.isi',$keywords);
+
+		if ($language == 'english') {
+            $this->db->group_start();
+            $this->db->like('berita.judul_berita_en', $keywords);
+            $this->db->or_like('berita.isi_en', $keywords);
+            $this->db->group_end();
+        } else {
+            $this->db->group_start();
+    		$this->db->like('berita.judul_berita',$keywords);
+	    	$this->db->or_like('berita.isi',$keywords);
+            $this->db->group_end();
+        }
+
 		$this->db->group_by('id_berita');
 		$this->db->order_by('id_berita','DESC');
 		$this->db->limit($limit,$start);
@@ -326,11 +350,23 @@ class Berita_model extends CI_Model {
 
 	// Read data
 	public function read($slug_berita) {
-		$this->db->select('berita.*, 
-					users.nama, 
-					kategori.nama_kategori, kategori.slug_kategori,
-					kategori.slug_kategori
-					');
+		// Ambil bahasa dari session
+        $language = $this->session->userdata('language');
+
+        if ($language == 'english') {
+            // Jika bahasa Inggris, pilih kolom _en dan beri alias ke nama kolom asli
+            $this->db->select('berita.id_berita, berita.id_user, berita.id_kategori, '.
+                               'berita.slug_berita, berita.judul_berita_en AS judul_berita, '.
+                               'berita.isi_en AS isi, berita.gambar, berita.icon, '.
+                               'berita.keywords, berita.status_berita, berita.jenis_berita, '.
+                               'berita.tanggal_publish, berita.urutan, berita.tanggal_post, '.
+                               'berita.hits, users.nama, kategori.nama_kategori, '.
+                               'kategori.slug_kategori');
+        } else {
+            // Jika bahasa Indonesia atau default
+            $this->db->select('berita.*, users.nama, kategori.nama_kategori, kategori.slug_kategori');
+        }
+
 		$this->db->from('berita');
 		// Join dg 2 tabel
 		$this->db->join('kategori','kategori.id_kategori = berita.id_kategori','LEFT');

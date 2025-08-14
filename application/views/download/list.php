@@ -38,10 +38,10 @@
             <?php $i=1; foreach($download as $download) { ?>
              <tr>
                <td><?php echo $i ?></td>
-               <td><?php echo $download->judul_download ?></td>
-               <td><?php echo $download->isi ?></td>
+               <td><?php echo html_escape($download->judul_download) ?></td>
+               <td><?php echo html_purify($download->isi) ?></td>
                <td>
-                 <a href="<?php echo base_url('download/unduh/'.$download->id_download) ?>" class="btn btn-primary btn-xs" target="_blank">
+                 <a href="<?php echo base_url('download/unduh/'.html_escape($download->id_download)) ?>" class="btn btn-primary btn-xs" target="_blank">
                    <i class="fa fa-download"></i> Unduh</a>
                  </td>
                </tr>

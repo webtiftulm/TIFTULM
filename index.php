@@ -657,7 +657,7 @@ switch (ENVIRONMENT)
  */
 require __DIR__ . '/vendor/autoload.php';
 \Sentry\init([
-  'dsn' => 'https://f05cc74ac90b44c7ed20d913ff9a957b@o4509749517680640.ingest.us.sentry.io/4509749520433152',
+  'dsn' => 'https://531379e8acdc22061c03c5c7a1161101@o4509834725818368.ingest.us.sentry.io/4509834975641600',
   // Add request headers, cookies and IP address,
   // see https://docs.sentry.io/platforms/php/data-management/data-collected/ for more info
   'send_default_pii' => true,

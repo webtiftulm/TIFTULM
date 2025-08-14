@@ -22,23 +22,23 @@ if($this->session->flashdata('sukses')) {
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" id="nameId" name="nama" placeholder="Full Name">
+                                        <input type="text" class="form-control" id="nameId" name="nama" placeholder="Full Name" value="<?php echo html_escape(set_value('nama')); ?>">
                                     </div>
                                     <!-- .form-group -->
                                 </div>
                                 <!-- .col-md-6 -->
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <input type="email" class="form-control" id="emailId" name="email" placeholder="Email Address">
+                                        <input type="email" class="form-control" id="emailId" name="email" placeholder="Email Address" value="<?php echo html_escape(set_value('email')); ?>">
                                     </div>
                                 </div>
                                 <!-- .col-md-6 -->
                             </div>
                             <!-- .row -->
                             <div class="form-group">
-                                <input type="text" class="form-control" id="subjectId" name="subject" placeholder="Subject">
+                                <input type="text" class="form-control" id="subjectId" name="subject" placeholder="Subject" value="<?php echo html_escape(set_value('subject')); ?>">
                             </div>
-                            <textarea class="form-control text-area" name="pesan" rows="3" placeholder="Message"></textarea>
+                            <textarea class="form-control text-area" name="pesan" rows="3" placeholder="Message"><?php echo html_escape(set_value('pesan')); ?></textarea>
                             <button type="submit" class="btn btn-default">Send Email</button>
                         </form>
                     </div>

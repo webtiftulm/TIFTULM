@@ -29,33 +29,46 @@ class Rps extends CI_Controller {
 	// Proses
 	public function proses()
 	{
-		$site = $this->konfigurasi_model->listing();
-		// PROSES HAPUS MULTIPLE
-		if(isset($_POST['hapus'])) {
-			$inp 				= $this->input;
-			$id_downloadnya		= $inp->post('idRps');
+		try {
+			$site = $this->konfigurasi_model->listing();
+			// PROSES HAPUS MULTIPLE
+			if (isset($_POST['hapus'])) {
+				$inp = $this->input;
+				$id_downloadnya = $inp->post('idRps');
 
-   			for($i=0; $i < sizeof($id_downloadnya);$i++) {
-   				$rps 	= $this->rps_model->detail($id_downloadnya[$i]);
-   				if($rps->fileRps !='') {
-					unlink('./assets/upload/file/'.$rps->fileRps);
+				for ($i = 0; $i < sizeof($id_downloadnya); $i++) {
+					$rps = $this->rps_model->detail($id_downloadnya[$i]);
+					if ($rps->fileRps != '') {
+						unlink('./assets/upload/file/' . $rps->fileRps);
+					}
+					$data = array('idRps' => $id_downloadnya[$i]);
+					$this->rps_model->delete($data);
 				}
-				$data = array(	'idRps'	=> $id_downloadnya[$i]);
-   				$this->rps_model->delete($data);
-   			}
 
-   			$this->session->set_flashdata('sukses', 'Data telah dihapus');
-   			redirect(base_url('admin/rps'),'refresh');
-   		// PROSES SETTING DRAFT
-   		}
-   	}
+				$this->session->set_flashdata('sukses', 'Data telah dihapus');
+				redirect(base_url('admin/rps'), 'refresh');
+				// PROSES SETTING DRAFT
+			}
+		} catch (Exception $e) {
+			log_message('error', 'Error in Rps/proses: ' . $e->getMessage());
+			$this->session->set_flashdata('error', 'Terjadi kesalahan saat memproses data.');
+			redirect(base_url('admin/rps'), 'refresh');
+		}
+	}
 
 	// Download file
-	public function unduh($id_download) {
-		$rps = $this->download_model->detail($id_download);
-		// Contents of photo.jpg will be automatically read
-		$data = './assets/upload/file/'.$rps->fileRps;
-		force_download($data, NULL);
+	public function unduh($id_download)
+	{
+		try {
+			$rps = $this->download_model->detail($id_download);
+			// Contents of photo.jpg will be automatically read
+			$data = './assets/upload/file/' . $rps->fileRps;
+			force_download($data, NULL);
+		} catch (Exception $e) {
+			log_message('error', 'Error in Rps/unduh: ' . $e->getMessage());
+			$this->session->set_flashdata('error', 'File tidak ditemukan atau terjadi kesalahan.');
+			redirect(base_url('admin/rps'), 'refresh');
+		}
 	}
 
 	// Tambah download
