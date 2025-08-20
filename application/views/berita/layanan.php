@@ -15,16 +15,8 @@
               <?php } ?>
               <!-- .single-event-img -->
               <div class="single-event-content">
-                <h3><?php
-                // if(!empty($berita->judul_berita)) { 
-                echo $berita->judul_berita;
-                // }
-                ?></h3><hr>
-                <?php 
-                // if(!empty($berita->isi)) { 
-                echo $berita->isi;
-                // }
-                ?>
+                <h3><?php echo smart_translate($berita->judul_berita, 'service_title_'.$berita->id_berita, 120); ?></h3><hr>
+                <?php echo smart_translate($berita->isi, 'service_content_'.$berita->id_berita, 1000); ?>
               </div>
               <!-- .single-event-content -->
             </div>

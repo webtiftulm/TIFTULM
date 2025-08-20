@@ -5,8 +5,8 @@
                 <div class="row">
                     <div class="col-md-8">
                         <?php if (!empty($berita)): ?>
-                                <?php if (isset($_GET['keyword']) && $_GET['keyword'] != ''): ?>
-                                    <h2>Hasil Pencarian: <span style="color:#faa441"><?= htmlspecialchars($_GET['keyword']) ?></span></h2>
+                                <?php if (isset($search_keyword) && $search_keyword != ''): ?>
+                                    <h2><?php echo lang_text('Hasil Pencarian', 'Search Results'); ?>: <span style="color:#faa441"><?= htmlspecialchars($search_keyword) ?></span></h2>
                                 <?php endif; ?>
                                 <?php foreach ($berita as $item) { ?>
                                 <div class="blog-items">
@@ -18,7 +18,7 @@
                                     <div class="blog-content-box">
                                         <div class="blog-content">  
                                             <h4><a
-                                                    href="<?php echo base_url('berita/read/' . $item->slug_berita); ?>"><?php echo $item->judul_berita; ?></a>
+                                                    href="<?php echo base_url('berita/read/' . $item->slug_berita); ?>"><?php echo smart_translate($item->judul_berita, 'berita_list_title_'.$item->id_berita, 120); ?></a>
                                             </h4>
                                             <ul class="meta-post">
                                                 <li><i class="fa fa-calendar" aria-hidden="true"></i>
@@ -26,19 +26,19 @@
                                                 <li><i class="fa fa-user"></i> <?php echo $item->nama; ?></li>
                                             </ul>
                                             <p class="text-justify">
-                                                <?php echo character_limiter(strip_tags($item->isi), 200); ?>
+                                                <?php echo smart_translate($item->isi, 'berita_list_content_'.$item->id_berita, 180); ?>
                                             </p>
                                             <a href="<?php echo base_url('berita/read/' . $item->slug_berita); ?>"><i
-                                                    class="fa fa-chevron-right"></i> Selengkapnya</a>
+                                                    class="fa fa-chevron-right"></i> <?php echo lang_text('Selengkapnya', 'Read More'); ?></a>
                                         </div>
                                     </div>
                                 </div>
                             <?php } ?>
                         <?php else: ?>
-                            <?php if (isset($_GET['keyword']) && $_GET['keyword'] != ''): ?>
-                                <h2>Hasil Pencarian: <span
-                                style="color:#faa441"><?= htmlspecialchars($_GET['keyword']) ?></span></h2>
-                                <p style="font-size: 1.5rem;">Tidak ada hasil untuk pencarian dengan kata kunci<strong> <?= htmlspecialchars($_GET['keyword']) ?></strong>.<br>Silakan coba lagi dengan kata kunci yang berbeda.</p>
+                            <?php if (isset($search_keyword) && $search_keyword != ''): ?>
+                                <h2><?php echo lang_text('Hasil Pencarian', 'Search Results'); ?>: <span
+                                style="color:#faa441"><?= htmlspecialchars($search_keyword) ?></span></h2>
+                                <p style="font-size: 1.5rem;"><?php echo lang_text('Tidak ada hasil untuk pencarian dengan kata kunci', 'No results found for search keyword'); ?><strong> <?= htmlspecialchars($search_keyword) ?></strong>.<br><?php echo lang_text('Silakan coba lagi dengan kata kunci yang berbeda.', 'Please try again with different keywords.'); ?></p>
                                 <?php endif; ?>
                         <?php endif ?>
                         <div class="pagination-option">
@@ -71,7 +71,7 @@
                     <div class="col-md-4">
                         <div class="sidebar">
                             <div class="widget">
-                                <h4 class="sidebar-widget-title">Berita Terpopuler</h4>
+                                <h4 class="sidebar-widget-title"><?php echo lang_text('Berita Terpopuler', 'Popular News'); ?></h4>
                                 <div class="widget-content">
                                     <ul class="popular-news-option">
                                         <?php foreach ($populer as $populer) { ?>
@@ -86,13 +86,13 @@
                                                 <!-- .popular-news-img -->
                                                 <div class="popular-news-contant">
                                                     <h5><a
-                                                            href="<?php echo base_url('berita/read/' . $populer->slug_berita); ?>"><?php echo $populer->judul_berita; ?></a>
+                                                            href="<?php echo base_url('berita/read/' . $populer->slug_berita); ?>"><?php echo smart_translate($populer->judul_berita, 'popular_title_'.$populer->id_berita, 80); ?></a>
                                                     </h5>
                                                     <p>
                                                         <i class="fa fa-calendar"></i>
                                                         <?php echo date('d M Y', strtotime($populer->tanggal_publish)); ?>
                                                         <a href="#"><i class="fa fa-eye" aria-hidden="true"></i>
-                                                            <?php echo $populer->hits; ?> Viewer</a>
+                                                            <?php echo $populer->hits; ?> <?php echo lang_text('Viewer', 'Views'); ?></a>
                                                     </p>
                                                 </div>
                                                 <!-- .popular-news-img -->

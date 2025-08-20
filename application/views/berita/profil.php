@@ -12,8 +12,8 @@
               <?php } ?>
               <!-- .single-event-img -->
               <div class="single-event-content">
-                <h3><?php echo $berita->judul_berita; ?></h3><hr>
-                <?php echo $berita->isi; ?>
+                <h3><?php echo smart_translate($berita->judul_berita, 'profil_detail_title_'.$berita->id_berita, 120); ?></h3><hr>
+                <?php echo smart_translate($berita->isi, 'profil_detail_content_'.$berita->id_berita, 1000); ?>
               </div>
               <!-- .single-event-content -->
             </div>

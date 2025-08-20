@@ -9,7 +9,7 @@
 <div class="row">
 <div class="upcoming-events">
 <div class="section-header">
-    <h2>Berita terbaru</h2>
+    <h2><?php echo lang_text('Berita Terbaru', 'Latest News'); ?></h2>
 </div>
 <!-- .section-header -->
 <div class="row">
@@ -27,14 +27,14 @@
             <!-- .event-img -->
             <div class="events-content">
                 <div style="min-height: 120px !important;">
-                <h3><a href="<?php echo base_url('berita/read/' . $berita->slug_berita); ?>"><?php echo $berita->judul_berita; ?></a></h3>
+                <h3><a href="<?php echo base_url('berita/read/' . $berita->slug_berita); ?>"><?php echo smart_translate($berita->judul_berita, 'berita_title_'.$berita->id_berita, 100); ?></a></h3>
                 <ul class="meta-post">
                     <li><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date('H:i', strtotime($berita->tanggal_publish)); ?></li>
                     <li><i class="fa fa-user"></i> <?php echo $berita->nama; ?></li>
                 </ul>
                 </div>
-                <p class="text-justify"><?php echo character_limiter(strip_tags($berita->isi), 200); ?></p>
-                <a href="<?php echo base_url('berita/read/' . $berita->slug_berita); ?>" class="btn btn-default"><i class="fa fa-chevron-right"></i> Selengkapnya</a>
+                <p class="text-justify"><?php echo smart_translate($berita->isi, 'berita_content_'.$berita->id_berita, 180); ?></p>
+                <a href="<?php echo base_url('berita/read/' . $berita->slug_berita); ?>" class="btn btn-default"><i class="fa fa-chevron-right"></i> <?php echo lang_text('Selengkapnya', 'Read More'); ?></a>
             </div>
             <!-- .events-content -->
         </div>

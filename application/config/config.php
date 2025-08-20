@@ -415,7 +415,9 @@ $config['cookie_httponly'] 	= FALSE;
 |--------------------------------------------------------------------------
 |
 | Determines whether to standardize newline characters in input data,
-| meaning to replace \r\n, \r, \n occurrences with the PHP_EOL value.
+| meaning to replace 
+, , 
+ occurrences with the PHP_EOL value.
 |
 | WARNING: This feature is DEPRECATED and currently available only
 |          for backwards compatibility purposes!
@@ -524,3 +526,14 @@ $config['rewrite_short_tags'] = FALSE;
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
 $config['proxy_ips'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| DeepL API Configuration
+|--------------------------------------------------------------------------
+|
+| DeepL API key untuk fitur terjemahan otomatis
+| Dapatkan API key gratis di https://www.deepl.com/pro-api
+|
+*/
+$config['deepl_api_key'] = 'effdef08-1d2a-4d36-8ce8-0da25d4a6b10:fx';

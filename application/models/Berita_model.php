@@ -222,61 +222,65 @@ class Berita_model extends CI_Model {
 
 	// Listing berita
 	public function search($keywords,$limit,$start) {
-		$language = $this->session->userdata('language');
-
-        if ($language == 'english') {
-            $this->db->select('berita.id_berita, berita.slug_berita, berita.judul_berita_en AS judul_berita, berita.isi_en AS isi, berita.gambar, berita.tanggal_publish, users.nama, kategori.nama_kategori, kategori.slug_kategori');
-        } else {
-    		$this->db->select('berita.*, 
-					users.nama, 
-					kategori.nama_kategori, kategori.slug_kategori,
-					kategori.slug_kategori
-					');
-        }
-
+		$this->load->helper('translation');
+		
+		// Get all berita first, then filter with bilingual search
+		$this->db->select('berita.*, 
+				users.nama, 
+				kategori.nama_kategori, kategori.slug_kategori
+				');
 		$this->db->from('berita');
-		// Join dg 2 tabel
 		$this->db->join('kategori','kategori.id_kategori = berita.id_kategori','LEFT');
 		$this->db->join('users','users.id_user = berita.id_user','LEFT');
-		// End join
 		$this->db->where(array(	'berita.status_berita'	=> 'Publish',
 								'berita.jenis_berita'	=> 'Berita'));
-
-		if ($language == 'english') {
-            $this->db->group_start();
-            $this->db->like('berita.judul_berita_en', $keywords);
-            $this->db->or_like('berita.isi_en', $keywords);
-            $this->db->group_end();
-        } else {
-            $this->db->group_start();
-    		$this->db->like('berita.judul_berita',$keywords);
-	    	$this->db->or_like('berita.isi',$keywords);
-            $this->db->group_end();
-        }
-
-		$this->db->group_by('id_berita');
 		$this->db->order_by('id_berita','DESC');
-		$this->db->limit($limit,$start);
 		$query = $this->db->get();
-		return $query->result();
+		$all_berita = $query->result();
+		
+		// Filter dengan bilingual search
+		$matching_results = [];
+		foreach ($all_berita as $berita) {
+			// Cek judul dan isi dengan bilingual matching
+			$title_match = bilingual_search_match($berita->judul_berita, 'berita_list_title_'.$berita->id_berita, $keywords, 120);
+			$content_match = bilingual_search_match($berita->isi, 'berita_list_content_'.$berita->id_berita, $keywords, 180);
+			
+			if ($title_match || $content_match) {
+				$matching_results[] = $berita;
+			}
+		}
+		
+		// Apply pagination
+		return array_slice($matching_results, $start, $limit);
 	}
 
 	// Listing total
 	public function total_search($keywords) {
+		$this->load->helper('translation');
+		
+		// Get all berita first, then filter with bilingual search
 		$this->db->select('berita.*, users.nama');
 		$this->db->from('berita');
-		// Join dg 2 tabel
-		
 		$this->db->join('users','users.id_user = berita.id_user','LEFT');
-		// End join
 		$this->db->where(array(	'berita.status_berita'	=> 'Publish',
 								'berita.jenis_berita'	=> 'Berita'));
-		$this->db->like('berita.judul_berita',$keywords);
-		$this->db->or_like('berita.isi',$keywords);
-		$this->db->group_by('id_berita');
 		$this->db->order_by('id_berita','DESC');
 		$query = $this->db->get();
-		return $query->result();
+		$all_berita = $query->result();
+		
+		// Filter dengan bilingual search
+		$matching_results = [];
+		foreach ($all_berita as $berita) {
+			// Cek judul dan isi dengan bilingual matching
+			$title_match = bilingual_search_match($berita->judul_berita, 'berita_list_title_'.$berita->id_berita, $keywords, 120);
+			$content_match = bilingual_search_match($berita->isi, 'berita_list_content_'.$berita->id_berita, $keywords, 180);
+			
+			if ($title_match || $content_match) {
+				$matching_results[] = $berita;
+			}
+		}
+		
+		return $matching_results;
 	}
 
 	// Listing read

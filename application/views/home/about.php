@@ -7,8 +7,8 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="about-greenforest-content">
-                            <h2><?php echo $profil->judul_berita ?></h2>
-                            <?php echo $profil->isi ?>
+                            <h2><?php echo smart_translate($profil->judul_berita, 'profil_title_'.$profil->id_berita, 100); ?></h2>
+                            <?php echo smart_translate($profil->isi, 'profil_content_'.$profil->id_berita, 500); ?>
                         </div>
                         <!-- .about-greenforest-content -->
                     </div>

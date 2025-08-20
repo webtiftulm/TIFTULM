@@ -26,19 +26,19 @@ class Berita extends CI_Controller {
 			$config['uri_segment'] 		= 3;
 			$config['full_tag_open'] 	= '<ul class="pagination">';
 			$config['full_tag_close'] 	= '</ul>';
-			$config['first_link'] 		= '&laquo; Awal';
+			$config['first_link'] 		= lang_text('&laquo; Awal', '&laquo; First');
 			$config['first_tag_open'] 	= '<li class="prev page">';
 			$config['first_tag_close'] 	= '</li>';
 
-			$config['last_link'] 		= 'Akhir &raquo;';
+			$config['last_link'] 		= lang_text('Akhir &raquo;', 'Last &raquo;');
 			$config['last_tag_open'] 	= '<li class="next page">';
 			$config['last_tag_close'] 	= '</li>';
 
-			$config['next_link'] 		= 'Selanjutnya &rarr;';
+			$config['next_link'] 		= lang_text('Selanjutnya &rarr;', 'Next &rarr;');
 			$config['next_tag_open'] 	= '<li class="next page">';
 			$config['next_tag_close'] 	= '</li>';
 
-			$config['prev_link'] 		= '&larr; Sebelumnya';
+			$config['prev_link'] 		= lang_text('&larr; Sebelumnya', '&larr; Previous');
 			$config['prev_tag_open'] 	= '<li class="prev page">';
 			$config['prev_tag_close'] 	= '</li>';
 
@@ -93,8 +93,7 @@ class Berita extends CI_Controller {
 	{
 		$this->load->helper('security');
 		try {
-			$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
-			$keyword = $this->security->xss_clean($keyword);
+			$keyword = $this->input->get('s', TRUE);
 			$keywords = encode_php_tags($keyword);
 			$populer = $this->berita_model->populer();
 
@@ -141,10 +140,11 @@ class Berita extends CI_Controller {
 			$page = ($this->uri->segment(3)) ? ($this->uri->segment(3) - 1) * $config['per_page'] : 0;
 			$berita = $this->berita_model->search($keywords, $config['per_page'], $page);
 
-			$data = array(
+			            $data = array(
 				'title' => 'Hasil pencarian: ' . $keywords,
 				'deskripsi' => 'Berita - ' . $site->namaweb,
 				'keywords' => 'Berita - ' . $site->namaweb,
+                'search_keyword' => $keywords,
 				'pagin' => $this->pagination->create_links(),
 				'berita' => $berita,
 				'site' => $site,
@@ -183,19 +183,19 @@ class Berita extends CI_Controller {
 			$config['uri_segment'] 		= 5;
 			$config['full_tag_open'] 	= '<ul class="pagination">';
 			$config['full_tag_close'] 	= '</ul>';
-			$config['first_link'] 		= '&laquo; Awal';
+			$config['first_link'] 		= lang_text('&laquo; Awal', '&laquo; First');
 			$config['first_tag_open'] 	= '<li class="prev page">';
 			$config['first_tag_close'] 	= '</li>';
 
-			$config['last_link'] 		= 'Akhir &raquo;';
+			$config['last_link'] 		= lang_text('Akhir &raquo;', 'Last &raquo;');
 			$config['last_tag_open'] 	= '<li class="next page">';
 			$config['last_tag_close'] 	= '</li>';
 
-			$config['next_link'] 		= 'Selanjutnya &rarr;';
+			$config['next_link'] 		= lang_text('Selanjutnya &rarr;', 'Next &rarr;');
 			$config['next_tag_open'] 	= '<li class="next page">';
 			$config['next_tag_close'] 	= '</li>';
 
-			$config['prev_link'] 		= '&larr; Sebelumnya';
+			$config['prev_link'] 		= lang_text('&larr; Sebelumnya', '&larr; Previous');
 			$config['prev_tag_open'] 	= '<li class="prev page">';
 			$config['prev_tag_close'] 	= '</li>';
 
@@ -210,9 +210,9 @@ class Berita extends CI_Controller {
 			$page 		= ($this->uri->segment(5)) ? ($this->uri->segment(5) - 1) * $config['per_page'] : 0;
 			$berita 	= $this->berita_model->kategori($id_kategori,$config['per_page'], $page);
 
-			$data = array(	'title'		=> 'Kategori berita: '.$kategori->nama_kategori,
-							'deskripsi'	=> 'Kategori berita: '.$kategori->nama_kategori,
-							'keywords'	=> 'Kategori berita: '.$kategori->nama_kategori,
+			$data = array(	'title'		=> lang_text('Kategori berita: ', 'News Category: ').$kategori->nama_kategori,
+							'deskripsi'	=> lang_text('Kategori berita: ', 'News Category: ').$kategori->nama_kategori,
+							'keywords'	=> lang_text('Kategori berita: ', 'News Category: ').$kategori->nama_kategori,
 							'berita'	=> $berita,
 							'pagin' 	=> $this->pagination->create_links(),
 							'site'		=> $site,
@@ -230,6 +230,17 @@ class Berita extends CI_Controller {
 		try {
 			$site 		= $this->konfigurasi_model->listing();
 			$berita 	= $this->berita_model->read($slug_berita);
+
+			// Logika Terjemahan
+			$this->load->helper('translation');
+			$site_lang = $this->session->userdata('site_lang');
+
+			if ($site_lang === 'en' && $berita) {
+				$berita->judul_berita = translate($berita->judul_berita, 'EN-US', 'ID');
+				$berita->isi = translate($berita->isi, 'EN-US', 'ID');
+			}
+			// Akhir Logika Terjemahan
+
 			$listing 	= $this->berita_model->listing_read();
 			$kategori 	= $this->nav_model->nav_berita();
 
